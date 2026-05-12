@@ -1,100 +1,1082 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kevin Dana Dev Tech</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #0a0a0a;
-      color: #f0f0f0;
-      font-family: 'Courier New', monospace;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .top-left {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #e2fb5a;
-      font-family: 'Courier New', monospace;
-    }
-    .grid-bg {
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-    .container { position: relative; z-index: 1; text-align: center; padding: 2rem; }
-    .tag {
-      display: inline-block;
-      border: 1px solid #e2fb5a;
-      color: #e2fb5a;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.8rem;
-      margin-bottom: 2rem;
-    }
-    h1 {
-      font-size: clamp(2.5rem, 8vw, 6rem);
-      font-weight: 700;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-    }
-    h1 span { color: #e2fb5a; }
-    p {
-      color: #666;
-      font-size: 1rem;
-      line-height: 1.8;
-      max-width: 480px;
-      margin: 0 auto 2rem;
-    }
-    a {
-      display: inline-block;
-      background: #e2fb5a;
-      color: #0a0a0a;
-      text-decoration: none;
-      padding: 0.8rem 2rem;
-      font-weight: 700;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: background 0.2s;
-    }
-    a:hover { background: #c8e040; }
-    .cursor {
-      display: inline-block;
-      width: 3px;
-      height: 1em;
-      background: #e2fb5a;
-      vertical-align: middle;
-      margin-left: 4px;
-      animation: blink 1s step-end infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Inteligencia Fiscal — DGR Jujuy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-5: #4375EE; --blue-8: #1D4ED8; --blue-1: #EEF2FF; --blue-2: #E0E7FF; --blue-3: #C7D2FE;
+  --gray-0: #F8FAFC; --gray-1: #F1F5F9; --gray-2: #E2E8F0; --gray-3: #CBD5E1; --gray-5: #64748B; --gray-7: #334155; --gray-9: #0F172A;
+  --red-5: #EF4444; --red-1: #FEF2F2; --green-5: #10B981; --green-1: #ECFDF5; --yellow-1: #FFFBEB;
+  --white: #FFFFFF; --sidebar-w: 230px; --header-h: 56px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--gray-0); color: var(--gray-9); font-size: 14px; }
+
+/* LOGIN */
+.login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #0F172A 0%, #1D4ED8 100%); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.login-card { background: white; border-radius: 20px; padding: 40px; width: 400px; max-width: 95vw; box-shadow: 0 24px 64px rgba(0,0,0,.3); }
+.login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.login-mark { width: 44px; height: 44px; background: var(--blue-5); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.login-title { font-size: 16px; font-weight: 800; color: var(--gray-9); line-height: 1.2; }
+.login-sub { font-size: 11px; color: var(--gray-5); margin-top: 2px; }
+.login-heading { font-size: 22px; font-weight: 700; color: var(--gray-9); margin-bottom: 6px; }
+.login-desc { font-size: 13px; color: var(--gray-5); margin-bottom: 28px; }
+.login-form { display: flex; flex-direction: column; gap: 16px; }
+.login-field { display: flex; flex-direction: column; gap: 5px; }
+.login-label { font-size: 12.5px; font-weight: 600; color: var(--gray-7); }
+.login-input { border: 1px solid var(--gray-2); border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--gray-9); outline: none; transition: border .15s; }
+.login-input:focus { border-color: var(--blue-5); box-shadow: 0 0 0 3px rgba(67,117,238,.12); }
+.login-input.error { border-color: var(--red-5); }
+.login-error { font-size: 12px; color: var(--red-5); font-weight: 500; min-height: 16px; }
+.login-btn { background: var(--blue-5); color: white; border: none; border-radius: 999px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s; margin-top: 4px; }
+.login-btn:hover { background: var(--blue-8); }
+.login-footer { text-align: center; font-size: 12px; color: var(--gray-5); margin-top: 20px; }
+
+.app { display: flex; min-height: 100vh; }
+.sidebar { width: var(--sidebar-w); background: white; border-right: 1px solid var(--gray-2); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
+.main { margin-left: var(--sidebar-w); flex: 1; }
+.topbar { height: var(--header-h); background: white; border-bottom: 1px solid var(--gray-2); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: sticky; top: 0; z-index: 50; }
+.sb-logo { padding: 16px; border-bottom: 1px solid var(--gray-2); display: flex; align-items: center; gap: 10px; }
+.sb-mark { width: 32px; height: 32px; background: var(--blue-5); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sb-text { font-size: 12.5px; font-weight: 700; line-height: 1.2; }
+.sb-sub { font-size: 10px; color: var(--gray-5); }
+.sb-nav { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 2px; }
+.sb-label { font-size: 9.5px; font-weight: 700; color: var(--gray-5); letter-spacing: .07em; text-transform: uppercase; padding: 8px 8px 3px; }
+.sb-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 6px; cursor: pointer; color: var(--gray-5); font-size: 13px; font-weight: 500; transition: all .12s; user-select: none; }
+.sb-item:hover { background: var(--gray-1); color: var(--gray-9); }
+.sb-item.active { background: var(--blue-1); color: var(--blue-5); font-weight: 600; }
+.sb-footer { padding: 12px; border-top: 1px solid var(--gray-2); }
+.user-row { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: 6px; }
+.avatar { width: 28px; height: 28px; border-radius: 999px; background: var(--blue-2); color: var(--blue-5); font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--gray-5); }
+.breadcrumb a { color: var(--blue-5); cursor: pointer; }
+.breadcrumb .cur { color: var(--gray-9); font-weight: 600; }
+.top-actions { display: flex; gap: 7px; }
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 500; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all .12s; }
+.btn-primary { background: var(--blue-5); color: white; }
+.btn-primary:hover { background: var(--blue-8); }
+.btn-outline { background: white; color: var(--gray-7); border: 1px solid var(--gray-2); }
+.btn-outline:hover { background: var(--gray-1); }
+.btn-ghost { background: transparent; color: var(--gray-5); }
+.btn-ghost:hover { background: var(--gray-1); }
+.btn-sm { padding: 5px 11px; font-size: 12px; }
+.view { display: none !important; }
+.view.active { display: block !important; }
+.page { padding: 20px; }
+.table-wrap { border-radius: 12px; border: 1px solid var(--gray-2); background: white; overflow: visible; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--gray-0); }
+th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--gray-5); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--gray-2); white-space: nowrap; }
+td { padding: 12px 14px; border-bottom: 1px solid var(--gray-1); font-size: 13px; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr.lote-row:hover td { background: var(--gray-0); cursor: pointer; }
+tr.lote-row.expanded > td { background: var(--blue-1) !important; }
+.badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.badge-cm { background: var(--blue-1); color: var(--blue-5); }
+.badge-local { background: #F3E8FF; color: #7C3AED; }
+.badge-cuit { background: #F3E8FF; color: #7C3AED; }
+.badge-lote { background: var(--blue-1); color: var(--blue-5); }
+.filters-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.search-input { display: flex; align-items: center; gap: 8px; background: white; border: 1px solid var(--gray-2); border-radius: 999px; padding: 7px 14px; min-width: 260px; }
+.search-input input { border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13px; background: transparent; flex: 1; }
+.filter-sep { flex: 1; }
+.dropdown-menu { position: fixed; background: white; border: 1px solid var(--gray-2); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.12); z-index: 9999; min-width: 230px; display: none; overflow: hidden; }
+.dropdown-menu.open { display: block; }
+.dropdown-label { font-size: 10px; font-weight: 700; color: var(--gray-5); text-transform: uppercase; letter-spacing: .06em; padding: 10px 14px 6px; }
+.dropdown-item { padding: 9px 14px; font-size: 13px; color: var(--gray-7); cursor: pointer; transition: background .1s; }
+.dropdown-item:hover { background: var(--blue-1); color: var(--blue-5); font-weight: 500; }
+.action-icon { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; color: var(--gray-5); border: none; background: transparent; transition: all .12s; }
+.action-icon:hover { background: var(--gray-1); color: var(--gray-9); }
+.expand-row { display: none; }
+.expand-row.open { display: table-row; }
+.inner-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--gray-2); }
+.inner-table th { padding: 7px 12px; font-size: 10.5px; font-weight: 700; color: var(--gray-5); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--gray-2); background: var(--gray-0); }
+.inner-table td { padding: 8px 12px; border-bottom: 1px solid var(--gray-1); font-size: 12px; }
+.inner-table tr:last-child td { border-bottom: none; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+.modal-backdrop.open { display: flex; }
+.modal { background: white; border-radius: 14px; width: 540px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,.14); }
+.modal-header { padding: 22px 24px 16px; border-bottom: 1px solid var(--gray-2); display: flex; align-items: flex-start; justify-content: space-between; }
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-subtitle { font-size: 12px; color: var(--gray-5); margin-top: 2px; }
+.modal-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.modal-footer { padding: 16px 24px 20px; border-top: 1px solid var(--gray-2); display: flex; gap: 8px; justify-content: flex-end; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12.5px; font-weight: 600; color: var(--gray-7); }
+.form-input { background: white; border: 1px solid var(--gray-2); border-radius: 6px; padding: 8px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--gray-9); outline: none; transition: border .15s; width: 100%; }
+.form-input:focus { border-color: var(--blue-5); box-shadow: 0 0 0 3px rgba(67,117,238,.1); }
+.form-input.error { border-color: var(--red-5); }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-hint { font-size: 11.5px; color: var(--gray-5); }
+.form-error { font-size: 11.5px; color: var(--red-5); font-weight: 500; min-height: 16px; }
+.cuit-tag-area { min-height: 80px; background: var(--gray-0); border: 1px dashed var(--gray-3); border-radius: 8px; padding: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; cursor: text; }
+.cuit-tag-area.error { border-color: var(--red-5); border-style: solid; }
+.cuit-tag { background: var(--blue-1); color: var(--blue-5); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; font-family: monospace; display: flex; align-items: center; gap: 4px; }
+.cuit-tag-x { cursor: pointer; opacity: .6; }
+.cuit-tag-x:hover { opacity: 1; }
+.estado-select { border:none; outline:none; font-family:'DM Sans',sans-serif; font-size:11.5px; font-weight:600; border-radius:999px; padding:4px 10px; cursor:pointer; appearance:none; text-align:center; }
+.estado-select.relevante { background:#ECFDF5; color:#059669; }
+.estado-select.reproceso { background:#FFF5F5; color:#DC2626; }
+.estado-select.ninguno { background:var(--gray-1); color:var(--gray-5); }
+.pt-table { border-collapse: collapse; font-size: 11.5px; white-space: nowrap; min-width: 100%; }
+.pt-table th { padding: 7px 10px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border: 1px solid var(--gray-2); text-align: center; }
+.pt-table td { padding: 8px 10px; border: 1px solid var(--gray-1); text-align: right; font-variant-numeric: tabular-nums; }
+.pt-table td.left { text-align: left; }
+.pt-table td.center { text-align: center; }
+.pt-table tr:hover td { background: #F8FAFC; }
+.g-id { background: #F1F5F9; color: #475569; }
+.g-fuente { background: #EFF6FF; color: #1D4ED8; }
+.g-mayor { background: #DBEAFE; color: #1D4ED8; font-weight: 700; }
+.g-cm05 { background: #F5F3FF; color: #6D28D9; }
+.g-df { background: #FEF9C3; color: #854D0E; }
+.g-coef { background: #ECFDF5; color: #065F46; }
+.g-bi { background: #FFF7ED; color: #9A3412; }
+.g-imp { background: #FEF2F2; color: #991B1B; }
+.g-cred { background: #F0FDF4; color: #166534; }
+.g-est { background: #1D4ED8; color: white; font-weight: 700; }
+.td-mayor { color: #1D4ED8; font-weight: 700; }
+.td-neg { color: #DC2626; font-weight: 600; }
+.td-calc { background: #EFF6FF; color: #1D4ED8; font-weight: 700; }
+.td-result { background: #1D4ED8; color: white; font-weight: 700; }
+.preview-table { width: 100%; border-collapse: collapse; }
+.preview-table th { padding: 8px 12px; background: var(--gray-0); font-size: 10.5px; font-weight: 700; color: var(--gray-5); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--gray-2); }
+.preview-table td { padding: 9px 12px; font-size: 12.5px; border-bottom: 1px solid var(--gray-1); }
+.preview-table tr:last-child td { border-bottom: none; }
+.confirm-row { display: flex; justify-content: space-between; padding: 9px 14px; border-bottom: 1px solid var(--gray-1); }
+.confirm-row:last-child { border-bottom: none; }
+.confirm-label { font-size: 12px; color: var(--gray-5); }
+.confirm-value { font-size: 13px; font-weight: 600; }
+.toast { position: fixed; bottom: 20px; right: 20px; color: white; padding: 11px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 9999; display: none; box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+.toast.success { background: #059669; }
+.toast.info { background: var(--gray-9); }
+/* LOGIN */
+.login-screen { position:fixed; inset:0; background:white; display:flex; flex-direction:column; z-index:1000; }
+.login-bg { flex:1; display:flex; align-items:center; justify-content:center; padding:80px 20px 200px; position:relative; }
+.login-wave { position:absolute; bottom:0; left:0; right:0; height:200px; pointer-events:none; overflow:hidden; }
+.login-wave svg { width:100%; height:100%; display:block; }
+.login-logo { position:absolute; top:28px; left:32px; display:flex; align-items:center; gap:10px; text-decoration:none; }
+.login-logo-eyebrow { font-size:9px; font-weight:500; color:#4375EE; letter-spacing:.8px; text-transform:uppercase; }
+.login-logo-name { font-size:20px; font-weight:800; color:#1D4ED8; letter-spacing:-.3px; }
+.login-card { background:white; border-radius:16px; padding:36px; width:100%; max-width:440px; box-shadow:0 8px 36px rgba(67,117,238,.14); }
+.login-title { font-size:22px; font-weight:800; color:#212529; line-height:1.3; margin-bottom:6px; }
+.login-sub { font-size:13px; color:#868E96; margin-bottom:0; }
+.login-field { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+.login-label { font-size:13px; font-weight:600; color:#495057; }
+.login-input-wrap { position:relative; }
+.login-input { width:100%; border:1px solid #DEE2E6; border-radius:8px; padding:10px 14px; font-family:'DM Sans',sans-serif; font-size:13.5px; color:#212529; outline:none; transition:border .15s; background:white; }
+.login-input:focus { border-color:#4375EE; box-shadow:0 0 0 3px rgba(67,117,238,.12); }
+.login-input.error { border-color:#FA5252; }
+.login-input.has-right { padding-right:42px; }
+.login-eye { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#ADB5BD; display:flex; align-items:center; justify-content:center; padding:4px; }
+.login-eye:hover { color:#4375EE; }
+.login-eye svg { width:18px; height:18px; }
+.login-error-box { background:#FFF5F5; border:1px solid #FFE3E3; border-radius:8px; padding:10px 14px; display:none; align-items:center; gap:8px; font-size:12.5px; color:#FA5252; margin-bottom:12px; }
+.login-error-box svg { width:16px; height:16px; flex-shrink:0; }
+.login-recover { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-size:12.5px; }
+.login-recover span { color:#868E96; }
+.login-recover a { color:#4375EE; font-weight:600; cursor:pointer; text-decoration:none; }
+.login-recover a:hover { text-decoration:underline; }
+.login-recover-box { background:#E3FAFC; border:1px solid #99E9F2; border-radius:8px; padding:10px 14px; display:none; align-items:center; gap:8px; font-size:12.5px; color:#0891B2; margin-bottom:14px; }
+.login-recover-box svg { width:16px; height:16px; flex-shrink:0; }
+.login-btn { width:100%; background:#4375EE; color:white; border:none; border-radius:999px; padding:12px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:background .15s; }
+.login-btn:hover { background:#1D4ED8; }
+.login-hint { font-size:12px; color:#ADB5BD; text-align:center; margin-top:12px; }
+.login-hint strong { color:#495057; }
+.dp-card { background:white; border:1px solid var(--gray-2); border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,.12); padding:16px; min-width:540px; }
+.dp-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; }
+.dp-presets { display:flex; gap:6px; }
+.dp-preset-btn { background:var(--gray-0); border:1px solid var(--gray-2); border-radius:999px; padding:4px 11px; font-size:11.5px; font-family:'DM Sans',sans-serif; color:var(--gray-7); cursor:pointer; transition:all .12s; }
+.dp-preset-btn:hover { background:var(--blue-1); color:var(--blue-5); border-color:var(--blue-3); }
+.dp-nav { display:flex; align-items:center; gap:6px; }
+.dp-nav-btn { width:26px; height:26px; border-radius:6px; border:1px solid var(--gray-2); background:white; cursor:pointer; font-size:15px; color:var(--gray-5); transition:all .12s; display:flex; align-items:center; justify-content:center; }
+.dp-nav-btn:hover { background:var(--gray-1); }
+.dp-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; min-width:520px; align-items:start; }
+.dp-days { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; grid-template-rows:repeat(6,28px); }
+.dp-day { height:28px; border:none; background:transparent; font-size:12px; font-family:'DM Sans',sans-serif; color:var(--gray-7); cursor:pointer; border-radius:6px; transition:all .1s; display:flex; align-items:center; justify-content:center; width:100%; }
+.dp-cal-title { font-size:12.5px; font-weight:700; color:var(--gray-9); text-align:center; margin-bottom:8px; }
+.dp-dow { display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:4px; }
+.dp-dow span { font-size:10px; font-weight:700; color:var(--gray-5); text-align:center; padding:3px 0; }
+.dp-day.other { color:var(--gray-3); }
+.dp-day.today { font-weight:700; box-shadow:inset 0 0 0 1.5px var(--blue-5); }
+.dp-day.range-start, .dp-day.range-end { background:var(--blue-5); color:white; font-weight:700; }
+.dp-day.range-start { border-radius:6px 0 0 6px; }
+.dp-day.range-end { border-radius:0 6px 6px 0; }
+.dp-day.in-range { background:var(--blue-1); color:var(--blue-5); border-radius:0; }
+.dp-day.single { border-radius:6px; }
+.dp-footer { display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid var(--gray-1); }
+.dp-footer-label { font-size:12px; color:var(--gray-5); }
+.dp-footer-label strong { color:var(--blue-5); }
+.ptab:hover { background:var(--gray-1);color:var(--gray-9); }
+.ptab.active { background:white;color:var(--blue-5);border:1px solid var(--gray-2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+</style>
 </head>
 <body>
-  <div class="grid-bg"></div>
-  <span class="top-left">modificado</span>
-  <div class="container">
-    <div class="tag">{ sitio de prueba }</div>
-    <h1>KD<span>.</span>TECH<span class="cursor"></span></h1>
-    <p>Hola, soy Kevin. Desarrollador Full Stack construyendo interfaces y soluciones digitales con precision y estilo.</p>
-    <a href="https://github.com/kevindanadev-tech" target="_blank">Ver GitHub &rarr;</a>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen" style="display:flex">
+
+  <a href="#" class="login-logo">
+    <svg width="160" height="38" viewBox="0 0 238 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M53.8197 30.8199C53.8197 43.5199 42.7897 56.4899 27.4697 56.4899C22.3197 56.4899 18.5397 55.1599 17.6497 52.3099C17.5497 51.9699 17.3197 51.4999 17.8597 51.7299C19.9497 52.6299 22.6697 53.0199 25.6497 53.0199C38.9397 53.0199 51.5997 41.6399 51.5997 27.5799C51.5997 22.7199 50.1597 18.1799 47.6297 14.3799C51.5997 18.6199 53.8197 23.7299 53.8197 30.8199Z" fill="#99E0F7"/><path d="M0 26.52C0 12.73 11.75 0 25.62 0C32.54 0 36.99 1.55 38.21 5.55C38.62 6.96 38.31 7.42 37.82 7.08C34.62 4.8 31.02 3.67001 25.95 3.67001C12.76 3.67001 2.44 13.76 2.44 27.06C2.44 34.83 6.21 41.86 12.12 46.25C5.04 41.75 0 34.85 0 26.52Z" fill="#008BD2"/><path d="M5.02051 27.4202C5.02051 14.8502 15.2105 4.66016 27.7805 4.66016C40.3505 4.66016 50.5405 14.8502 50.5405 27.4202C50.5405 39.9902 40.3505 50.1802 27.7805 50.1802C15.2105 50.1802 5.02051 39.9902 5.02051 27.4202Z" fill="url(#paint0_linear_723_1041)"/><path d="M7.46973 13.4199C12.0997 6.95994 18.0097 5.68994 25.6197 5.68994C34.5997 5.68994 40.5397 10.5499 40.5397 18.5599C40.5397 24.4899 36.6597 28.3499 31.9997 29.7099L42.1197 45.8599C40.4197 47.2199 39.1397 47.4199 37.2397 47.4199C33.7397 47.4199 31.8497 46.0599 30.0097 42.9499L22.8397 31.6999H18.1397V42.0799H7.46973V13.4199Z" fill="url(#paint1_linear_723_1041)"/><path d="M7.46973 12.4203C11.6897 6.89027 17.3497 5.28027 25.3197 5.28027C34.6997 5.28027 39.6397 9.92027 39.6397 17.9303C39.6397 23.8603 35.5597 27.8203 31.3497 29.0203L41.7297 45.6203C40.6497 46.3203 38.9497 46.6203 37.0497 46.6203C33.5497 46.6203 32.0497 45.4603 30.0097 42.1503L21.9397 30.7003H16.5697V41.3803H7.46973V12.4203Z" fill="url(#paint2_linear_723_1041)"/><path d="M16.5703 15.8203V23.5903H23.3703C26.4703 23.5903 28.3003 21.6803 28.3003 19.3503C28.3003 16.7103 26.4103 15.8203 22.7903 15.8203H16.5703Z" fill="url(#paint3_linear_723_1041)"/><path d="M62.29 18.9199H77.06C84.01 18.9199 87.55 23.7799 87.55 29.0399C87.55 33.2099 85.41 37.1899 81.24 38.9199L87.89 48.1999H80.65L74.82 39.3399H68.59V48.1999H62.29V18.9199ZM76.27 33.2499C79.86 33.2499 81.34 30.7199 81.34 28.2399C81.34 25.5199 79.65 23.1399 76.45 23.1399H68.59V33.2499H76.27Z" fill="#0074A6"/><path d="M93.0898 18.9199H115.42V23.9599H99.5398V30.5599H113.44V35.5999H99.5398V42.7099H115.59V48.1999H93.0898V18.9199Z" fill="#0074A6"/><path d="M121.13 18.9199H127.44L141.09 37.3399V18.9199H147.36V47.8899H141.99L127.4 28.5299V48.1999H121.13V18.9199Z" fill="#0074A6"/><path d="M161.831 24.32H152.561V19.23H177.481V24.32H168.281V48.19H161.831V24.32Z" fill="#0074A6"/><path d="M192.23 18.7202H198.45L210.65 48.0202H204.19L201.42 41.4702H189.26L186.28 48.2002H179.97L192.23 18.7202ZM199.25 35.8402L194.82 25.2402L190.75 35.8402H199.25Z" fill="#0074A6"/><path d="M218.43 39.32C221.06 41.4 223.78 42.78 227.42 42.78C229.71 42.78 232.28 41.62 232.28 39.57C232.28 35.67 216.43 36.67 216.43 26.85C216.43 21.43 221.48 18.71 226.58 18.71C229.98 18.71 233.83 20.13 236.93 22.12L233.78 27.12C231.49 25.54 228.68 24.31 226.34 24.31C224.01 24.31 222.43 25.2 222.43 27.03C222.43 31.68 237.78 29.92 237.78 39.44C237.78 44.97 233.31 48.42 227.18 48.42C222.79 48.42 219.25 46.84 214.99 44.07L218.43 39.32Z" fill="#0074A6"/>
+<defs><linearGradient id="paint0_linear_723_1041" x1="27.7805" y1="4.72016" x2="27.7805" y2="50.2202" gradientUnits="userSpaceOnUse"><stop stop-color="#009EE0"/><stop offset="0.9947" stop-color="#005782"/></linearGradient><linearGradient id="paint1_linear_723_1041" x1="24.7997" y1="5.31994" x2="24.7997" y2="47.4199" gradientUnits="userSpaceOnUse"><stop stop-color="#BCBEC0"/><stop offset="0.9947" stop-color="#939598"/></linearGradient><linearGradient id="paint2_linear_723_1041" x1="24.5997" y1="5.32027" x2="24.5997" y2="46.6203" gradientUnits="userSpaceOnUse"><stop stop-color="#F9F9F9"/><stop offset="0.9947" stop-color="#D1D3D4"/></linearGradient><linearGradient id="paint3_linear_723_1041" x1="22.4303" y1="15.8203" x2="22.4303" y2="23.6203" gradientUnits="userSpaceOnUse"><stop stop-color="#81CFF4"/><stop offset="0.9947" stop-color="#0074A6"/></linearGradient></defs>
+    </svg>
+  </a>
+
+  <div class="login-bg">
+    <div class="login-card">
+
+      <div style="text-align:center;margin-bottom:24px">
+        <h1 class="login-title">Sistema de Inteligencia<br>Fiscal de Rentas</h1>
+        <p class="login-sub">Panel de Administración — Acceso restringido</p>
+      </div>
+
+      <div class="login-field">
+        <label class="login-label">Email <span class="req" style="color:#FA5252">*</span></label>
+        <div class="login-input-wrap">
+          <input class="login-input" id="login-email" type="email" placeholder="admin@rentas.gob.ar" autocomplete="off" value="admin@rentas.gob.ar">
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label class="login-label">Contraseña <span style="color:#FA5252">*</span></label>
+        <div class="login-input-wrap">
+          <input class="login-input has-right" id="login-pass" type="password" placeholder="admin123" autocomplete="new-password" onkeydown="if(event.key==='Enter') doLogin()">
+          <button class="login-eye" onclick="toggleLoginEye()" type="button">
+            <svg id="login-eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-error-box" id="login-err-box">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span id="login-err-txt">Credenciales incorrectas.</span>
+      </div>
+
+      <div class="login-recover">
+        <span>¿Olvidaste tu contraseña?</span>
+        <a onclick="toggleRecoverAlert()">Recuperar contraseña</a>
+      </div>
+
+      <div class="login-recover-box" id="login-recover-box">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Si querés recuperar o cambiar tu contraseña, comunicate con el administrador.
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">Ingresar</button>
+
+      <p class="login-hint">Prueba: <strong>admin@rentas.gob.ar</strong> / <strong>admin123</strong></p>
+
+    </div>
   </div>
+
+  <div class="login-wave">
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+      <path d="M0,120 C240,60 480,180 720,120 C960,60 1200,160 1440,100 L1440,200 L0,200 Z" fill="#dbeafe" opacity="0.5"/>
+      <path d="M0,140 C180,80 360,170 540,130 C720,90 900,160 1080,120 C1260,80 1380,150 1440,120 L1440,200 L0,200 Z" fill="#bfdbfe" opacity="0.8"/>
+    </svg>
+  </div>
+
+</div>
+
+<div class="app" id="main-app" style="display:none">
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <svg width="36" height="36" viewBox="0 0 54 57" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+        <path d="M53.8197 30.8199C53.8197 43.5199 42.7897 56.4899 27.4697 56.4899C22.3197 56.4899 18.5397 55.1599 17.6497 52.3099C17.5497 51.9699 17.3197 51.4999 17.8597 51.7299C19.9497 52.6299 22.6697 53.0199 25.6497 53.0199C38.9397 53.0199 51.5997 41.6399 51.5997 27.5799C51.5997 22.7199 50.1597 18.1799 47.6297 14.3799C51.5997 18.6199 53.8197 23.7299 53.8197 30.8199Z" fill="#99E0F7"/><path d="M0 26.52C0 12.73 11.75 0 25.62 0C32.54 0 36.99 1.55 38.21 5.55C38.62 6.96 38.31 7.42 37.82 7.08C34.62 4.8 31.02 3.67001 25.95 3.67001C12.76 3.67001 2.44 13.76 2.44 27.06C2.44 34.83 6.21 41.86 12.12 46.25C5.04 41.75 0 34.85 0 26.52Z" fill="#008BD2"/><path d="M5.02051 27.4202C5.02051 14.8502 15.2105 4.66016 27.7805 4.66016C40.3505 4.66016 50.5405 14.8502 50.5405 27.4202C50.5405 39.9902 40.3505 50.1802 27.7805 50.1802C15.2105 50.1802 5.02051 39.9902 5.02051 27.4202Z" fill="url(#sbpaint0)"/><path d="M7.46973 13.4199C12.0997 6.95994 18.0097 5.68994 25.6197 5.68994C34.5997 5.68994 40.5397 10.5499 40.5397 18.5599C40.5397 24.4899 36.6597 28.3499 31.9997 29.7099L42.1197 45.8599C40.4197 47.2199 39.1397 47.4199 37.2397 47.4199C33.7397 47.4199 31.8497 46.0599 30.0097 42.9499L22.8397 31.6999H18.1397V42.0799H7.46973V13.4199Z" fill="url(#sbpaint1)"/><path d="M7.46973 12.4203C11.6897 6.89027 17.3497 5.28027 25.3197 5.28027C34.6997 5.28027 39.6397 9.92027 39.6397 17.9303C39.6397 23.8603 35.5597 27.8203 31.3497 29.0203L41.7297 45.6203C40.6497 46.3203 38.9497 46.6203 37.0497 46.6203C33.5497 46.6203 32.0497 45.4603 30.0097 42.1503L21.9397 30.7003H16.5697V41.3803H7.46973V12.4203Z" fill="url(#sbpaint2)"/><path d="M16.5703 15.8203V23.5903H23.3703C26.4703 23.5903 28.3003 21.6803 28.3003 19.3503C28.3003 16.7103 26.4103 15.8203 22.7903 15.8203H16.5703Z" fill="url(#sbpaint3)"/>
+        <defs>
+          <linearGradient id="sbpaint0" x1="27.78" y1="4.72" x2="27.78" y2="50.22" gradientUnits="userSpaceOnUse"><stop stop-color="#009EE0"/><stop offset="1" stop-color="#005782"/></linearGradient>
+          <linearGradient id="sbpaint1" x1="24.8" y1="5.32" x2="24.8" y2="47.42" gradientUnits="userSpaceOnUse"><stop stop-color="#BCBEC0"/><stop offset="1" stop-color="#939598"/></linearGradient>
+          <linearGradient id="sbpaint2" x1="24.6" y1="5.28" x2="24.6" y2="46.62" gradientUnits="userSpaceOnUse"><stop stop-color="#F9F9F9"/><stop offset="1" stop-color="#D1D3D4"/></linearGradient>
+          <linearGradient id="sbpaint3" x1="22.43" y1="15.82" x2="22.43" y2="23.62" gradientUnits="userSpaceOnUse"><stop stop-color="#81CFF4"/><stop offset="1" stop-color="#0074A6"/></linearGradient>
+        </defs>
+      </svg>
+      <div><div class="sb-text">Inteligencia Fiscal</div><div class="sb-sub">DGR Jujuy</div></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-label">Análisis</div>
+      <div class="sb-item" id="nav-padron" onclick="showView('padron')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Padrón Unificado
+      </div>
+      <div class="sb-item active" id="nav-lotes" onclick="showView('lotes')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Gestión de Lotes
+      </div>
+      <div class="sb-item" id="nav-tablero" onclick="showView('tablero')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Gestión de Cruces
+      </div>
+      <div class="sb-label" style="margin-top:8px">Seguimiento</div>
+      <div class="sb-item" id="nav-reproceso" onclick="showView('reproceso')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Reproceso
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div class="user-row">
+        <div class="avatar">NG</div>
+        <div><div style="font-size:12px;font-weight:600">Nadia Guzmán</div><div style="font-size:10.5px;color:var(--gray-5)">Analista Fiscal</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <!-- VIEW: PADRÓN UNIFICADO -->
+    <div id="view-padron" class="view">
+      <div class="topbar">
+        <div class="breadcrumb">
+          <span>Sistema IF</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="cur" id="padron-breadcrumb">Padrón Unificado</span>
+        </div>
+        <div class="top-actions"></div>
+      </div>
+
+      <div id="padron-lista" style="padding:20px">
+        <div style="display:flex;gap:8px;margin-bottom:20px;align-items:center">
+          <div class="search-input" style="flex:1;max-width:560px;border-radius:10px;padding:10px 16px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar por CUIT o razón social..." style="font-size:14px">
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div onclick="abrirDetallePadron()" style="background:white;border:1px solid var(--gray-2);border-radius:14px;padding:18px 22px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:box-shadow .15s,border-color .15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(67,117,238,.12)';this.style.borderColor='#BFDBFE'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.04)';this.style.borderColor='var(--gray-2)'">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10.5px;color:var(--gray-5);font-family:monospace;margin-bottom:4px">30-50401884-5</div>
+              <div style="font-size:16px;font-weight:800;color:var(--gray-9);margin-bottom:6px">VOLKSWAGEN ARGENTINA S.A.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--gray-5)">
+                <span><strong style="color:var(--gray-7)">Actividad:</strong> Fabricación de vehículos automotores</span>
+                <span><strong style="color:var(--gray-7)">Régimen:</strong> Convenio Multilateral</span>
+                <span><strong style="color:var(--gray-7)">Estado:</strong> Activo</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+              <span style="background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px">Alto riesgo</span>
+              <div onclick="event.stopPropagation()" style="position:relative">
+                <button onclick="toggleMenuCuit(this)" style="width:32px;height:32px;border:1px solid var(--gray-2);background:white;cursor:pointer;border-radius:8px;color:var(--gray-5);font-size:18px;display:flex;align-items:center;justify-content:center;font-weight:700">⋯</button>
+                <div class="cuit-menu" style="display:none;position:absolute;right:0;top:36px;background:white;border:1px solid var(--gray-2);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:99;min-width:190px;overflow:hidden">
+                  <div onclick="abrirDetallePadron()" style="padding:10px 14px;font-size:13px;cursor:pointer;color:var(--gray-9)" onmouseover="this.style.background='var(--gray-0)'" onmouseout="this.style.background=''">🔍 Ver análisis completo</div>
+                  <div onclick="showToast('✅ CUIT agregado a lote','success')" style="padding:10px 14px;font-size:13px;cursor:pointer;color:var(--gray-9)" onmouseover="this.style.background='var(--gray-0)'" onmouseout="this.style.background=''">➕ Agregar a lote</div>
+                  <div onclick="toggleReprocesoPadron()" style="padding:10px 14px;font-size:13px;cursor:pointer;color:#DC2626" onmouseover="this.style.background='#FFF5F5'" onmouseout="this.style.background=''">🔴 Marcar reproceso</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10.5px;color:var(--gray-5);font-family:monospace;margin-bottom:4px">30-50168521-2</div>
+              <div style="font-size:16px;font-weight:800;color:var(--gray-9);margin-bottom:6px">CERÁMICA DEL NORTE S.A.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--gray-5)">
+                <span><strong style="color:var(--gray-7)">Actividad:</strong> Fabricación cerámica</span>
+                <span><strong style="color:var(--gray-7)">Régimen:</strong> Convenio Multilateral</span>
+                <span><strong style="color:var(--gray-7)">Estado:</strong> Activo</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+              <span style="background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px">Alto riesgo</span>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10.5px;color:var(--gray-5);font-family:monospace;margin-bottom:4px">27-32178654-3</div>
+              <div style="font-size:16px;font-weight:800;color:var(--gray-9);margin-bottom:6px">MINERA ALTIPLANO JUJUY S.A.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--gray-5)">
+                <span><strong style="color:var(--gray-7)">Actividad:</strong> Minería</span>
+                <span><strong style="color:var(--gray-7)">Régimen:</strong> Convenio Multilateral</span>
+                <span><strong style="color:var(--gray-7)">Estado:</strong> Activo</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+              <span style="background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px">Alto riesgo</span>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10.5px;color:var(--gray-5);font-family:monospace;margin-bottom:4px">30-19876543-2</div>
+              <div style="font-size:16px;font-weight:800;color:var(--gray-9);margin-bottom:6px">CONSTRUCTORA TILCARA HNOS. S.A.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--gray-5)">
+                <span><strong style="color:var(--gray-7)">Actividad:</strong> Construcción</span>
+                <span><strong style="color:var(--gray-7)">Régimen:</strong> Régimen General</span>
+                <span><strong style="color:var(--gray-7)">Estado:</strong> Activo</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+              <span style="background:#FFF7ED;color:#D97706;font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px">Medio riesgo</span>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10.5px;color:var(--gray-5);font-family:monospace;margin-bottom:4px">20-71234567-8</div>
+              <div style="font-size:16px;font-weight:800;color:var(--gray-9);margin-bottom:6px">FARMACÉUTICA VALLES S.A.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--gray-5)">
+                <span><strong style="color:var(--gray-7)">Actividad:</strong> Farmacéutica</span>
+                <span><strong style="color:var(--gray-7)">Régimen:</strong> Régimen General</span>
+                <span><strong style="color:var(--gray-7)">Estado:</strong> Activo</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+              <span style="background:#ECFDF5;color:#059669;font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px">Bajo riesgo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="padron-detalle" style="display:none;padding:20px">
+        <div style="margin-bottom:16px">
+          <button onclick="volverListaPadron()" style="display:flex;align-items:center;gap:6px;background:white;border:1px solid var(--gray-2);border-radius:999px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--gray-7);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Padrón Unificado
+          </button>
+        </div>
+        <div style="background:white;border:1px solid var(--gray-2);border-radius:14px;padding:20px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:16px">
+            <div>
+              <div style="font-size:10.5px;color:var(--gray-5);font-family:monospace;letter-spacing:.05em;margin-bottom:4px">CUIT 30-50401884-5</div>
+              <div style="font-size:22px;font-weight:800;color:var(--gray-9);margin-bottom:8px">VOLKSWAGEN ARGENTINA S.A.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--gray-5)">
+                <span><strong style="color:var(--gray-7)">Estado:</strong> Activo</span>
+                <span><strong style="color:var(--gray-7)">Actividad:</strong> Fabricación de vehículos automotores</span>
+                <span><strong style="color:var(--gray-7)">Régimen:</strong> Convenio Multilateral</span>
+                <span><strong style="color:var(--gray-7)">Domicilio:</strong> Av. San Martín 1234, S.S. de Jujuy</span>
+                <span><strong style="color:var(--gray-7)">Última actualización:</strong> 24/04/2026</span>
+              </div>
+            </div>
+            <div style="text-align:center;background:var(--red-1);border:1px solid #FECACA;border-radius:12px;padding:14px 20px;flex-shrink:0">
+              <div style="font-size:34px;font-weight:900;color:#DC2626;line-height:1">82</div>
+              <div style="font-size:10px;color:#991B1B;text-transform:uppercase;letter-spacing:.06em;margin-top:4px">Score riesgo</div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--gray-1);padding-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div id="reproceso-chip" onclick="toggleReprocesoPadron()" style="display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--gray-2);background:var(--gray-0);cursor:pointer;user-select:none;transition:all .2s">
+              <div id="reproceso-switch" style="width:28px;height:16px;border-radius:999px;background:var(--gray-2);position:relative;transition:background .2s;flex-shrink:0">
+                <div id="reproceso-knob" style="position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:white;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+              </div>
+              <span id="reproceso-label" style="font-size:12px;font-weight:600;color:var(--gray-5);white-space:nowrap">Marcar reproceso</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px">
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:12px;padding:18px"><div style="font-size:11.5px;color:var(--gray-5);margin-bottom:6px">Facturación declarada</div><div style="font-size:24px;font-weight:800;color:var(--gray-9)">$42.937 M</div><div style="font-size:12px;color:var(--gray-5);margin-top:4px">Últimos 12 meses</div></div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:12px;padding:18px"><div style="font-size:11.5px;color:var(--gray-5);margin-bottom:6px">BI estimada</div><div style="font-size:24px;font-weight:800;color:var(--gray-9)">$29.266 M</div><div style="font-size:12px;color:#D97706;margin-top:4px">NCU recalculado 0.83%</div></div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:12px;padding:18px"><div style="font-size:11.5px;color:var(--gray-5);margin-bottom:6px">Diferencia BI detectada</div><div style="font-size:24px;font-weight:800;color:#DC2626">$12.386 M</div><div style="font-size:12px;color:#DC2626;margin-top:4px">Base omitida estimada</div></div>
+          <div style="background:white;border:1px solid var(--gray-2);border-radius:12px;padding:18px"><div style="font-size:11.5px;color:var(--gray-5);margin-bottom:6px">Impuesto estimado</div><div style="font-size:24px;font-weight:800;color:#DC2626">$185.814 K</div><div style="font-size:12px;color:var(--gray-5);margin-top:4px">Sujeto a revisión</div></div>
+        </div>
+        <div style="background:white;border:1px solid var(--gray-2);border-radius:12px;overflow:hidden;margin-top:16px">
+          <div style="display:flex;border-bottom:1px solid var(--gray-2);overflow-x:auto;background:var(--gray-0)" id="padron-tabs">
+            <button class="ptab-btn active" onclick="setPadronTab(this,'tab-iibb')" style="padding:14px 20px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--blue-5);cursor:pointer;white-space:nowrap;border-bottom:2px solid var(--blue-5);margin-bottom:-1px">Ingresos Brutos</button>
+            <button class="ptab-btn" onclick="setPadronTab(this,'tab-arca')" style="padding:14px 20px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--gray-5);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px">ARCA</button>
+            <button class="ptab-btn" onclick="setPadronTab(this,'tab-cm')" style="padding:14px 20px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--gray-5);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px">Convenio Multilateral</button>
+            <button class="ptab-btn" onclick="setPadronTab(this,'tab-ret')" style="padding:14px 20px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--gray-5);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px">Retenciones</button>
+            <button class="ptab-btn" onclick="setPadronTab(this,'tab-inm')" style="padding:14px 20px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--gray-5);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px">Inmuebles</button>
+          </div>
+          <div id="tab-iibb" class="padron-tab-content" style="overflow-x:auto">
+            <table><thead><tr><th>Período</th><th>BI Declarada</th><th>Ingresos</th><th>Egresos</th><th>Actualización</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>2026-01</td><td>$95.000.000</td><td>$95.000.000</td><td>$71.000.000</td><td>10/02/2026</td><td><span class="badge" style="background:#ECFDF5;color:#059669">✓ Validado</span></td></tr>
+              <tr><td>2026-02</td><td>$101.000.000</td><td>$101.000.000</td><td>$73.000.000</td><td>09/03/2026</td><td><span class="badge" style="background:#ECFDF5;color:#059669">✓ Validado</span></td></tr>
+              <tr><td>2026-03</td><td>$108.000.000</td><td>$108.000.000</td><td>$74.000.000</td><td>10/04/2026</td><td><span class="badge" style="background:#ECFDF5;color:#059669">✓ Validado</span></td></tr>
+            </tbody></table>
+          </div>
+          <div id="tab-arca" class="padron-tab-content" style="display:none;overflow-x:auto">
+            <table><thead><tr><th>Período</th><th>Facturación ARCA</th><th>BI declarada IIBB</th><th>Diferencia</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>2026-01</td><td>$138.000.000</td><td>$95.000.000</td><td style="color:#DC2626;font-weight:600">+$43.000.000</td><td><span class="badge" style="background:#FEF2F2;color:#DC2626">Diferencia</span></td></tr>
+              <tr><td>2026-02</td><td>$151.000.000</td><td>$101.000.000</td><td style="color:#DC2626;font-weight:600">+$50.000.000</td><td><span class="badge" style="background:#FEF2F2;color:#DC2626">Diferencia</span></td></tr>
+            </tbody></table>
+          </div>
+          <div id="tab-cm" class="padron-tab-content" style="display:none;overflow-x:auto">
+            <table><thead><tr><th>Período</th><th>Jurisdicción</th><th>BI Declarada CM03</th><th>Coef. Unificado</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>2026-01</td><td>Jujuy (J.910)</td><td>$16.879.656.323</td><td>0.4800%</td><td><span class="badge" style="background:#FEF2F2;color:#DC2626">Desvío</span></td></tr>
+            </tbody></table>
+          </div>
+          <div id="tab-ret" class="padron-tab-content" style="display:none;overflow-x:auto">
+            <table><thead><tr><th>Período</th><th>Agente</th><th>Monto retenido</th><th>Declarado</th><th>Diferencia</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>2026-01</td><td>ARCOR S.A.</td><td>$1.240.000</td><td>$1.240.000</td><td style="color:#059669">$0</td><td><span class="badge" style="background:#ECFDF5;color:#059669">✓ OK</span></td></tr>
+              <tr><td>2026-01</td><td>CARREFOUR ARG.</td><td>$2.890.000</td><td>$2.450.000</td><td style="color:#DC2626;font-weight:600">+$440.000</td><td><span class="badge" style="background:#FEF2F2;color:#DC2626">Diferencia</span></td></tr>
+            </tbody></table>
+          </div>
+          <div id="tab-inm" class="padron-tab-content" style="display:none;overflow-x:auto">
+            <table><thead><tr><th>Partida</th><th>Domicilio</th><th>Categoría</th><th>Valuación fiscal</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>12-345-678</td><td>Av. San Martín 1234</td><td>Comercial</td><td>$45.000.000</td><td><span class="badge" style="background:#ECFDF5;color:#059669">Al día</span></td></tr>
+              <tr><td>12-345-679</td><td>Ruta Nac. 9 km 12</td><td>Industrial</td><td>$120.000.000</td><td><span class="badge" style="background:#ECFDF5;color:#059669">Al día</span></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: GESTIÓN DE LOTES -->
+    <div id="view-lotes" class="view">
+      <div class="topbar">
+        <div class="breadcrumb"><span>Sistema IF</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="cur">Gestión de Lotes</span></div>
+        <div class="top-actions">
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-nuevo-lote')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo Lote
+          </button>
+        </div>
+      </div>
+      <div class="page">
+        <div class="filters-row">
+          <div class="search-input">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar por número de lote..." oninput="filtrarLotes(this.value)">
+          </div>
+          <div class="filter-sep"></div>
+          <span style="font-size:12px;color:var(--gray-5)">5 lotes</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:32px"></th>
+                <th>Nro de lote</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th style="text-align:center">Cantidad de CUITs</th>
+                <th>Fecha de generación</th>
+                <th style="width:44px"></th>
+              </tr>
+            </thead>
+            <tbody id="lotes-tbody">
+              <tr class="lote-row" id="row-lote-622" onclick="toggleLote('622')">
+                <td><span id="chevron-622" style="display:inline-flex;align-items:center;color:var(--gray-5);transition:transform .2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span></td>
+                <td style="font-weight:700">622</td>
+                <td style="font-weight:500">ANOVA-622</td>
+                <td style="color:var(--gray-5)">Comercio mayorista — variación negativa</td>
+                <td style="text-align:center;font-weight:600">47</td>
+                <td style="color:var(--gray-5)">12/04/2026</td>
+                <td onclick="event.stopPropagation()">
+                  <button class="action-icon" onclick="toggleMenu('menu-622',this)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="dropdown-menu" id="menu-622" style="min-width:260px;padding:0;overflow:hidden">
+                    <div style="padding:8px 0">
+                      <div onclick="confirmarCruceLoteSimple('622','Control de desvío de BI — Régimen CM')" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--gray-7)" onmouseover="this.style.background='var(--blue-1)'" onmouseout="this.style.background=''">Control de desvío de BI — Régimen CM</div>
+                      <div onclick="confirmarCruceLoteSimple('622','Control de créditos')" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--gray-7)" onmouseover="this.style.background='var(--blue-1)'" onmouseout="this.style.background=''">Control de créditos</div>
+                      <div onclick="confirmarCruceLoteSimple('622','Detección de no inscriptos')" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--gray-7)" onmouseover="this.style.background='var(--blue-1)'" onmouseout="this.style.background=''">Detección de no inscriptos</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr class="expand-row" id="expand-622">
+                <td colspan="7" style="padding:0;background:var(--gray-0);border-bottom:2px solid var(--blue-3)">
+                  <div style="padding:12px 16px 14px 48px">
+                    <table class="inner-table">
+                      <thead><tr><th>#</th><th>CUIT</th><th>Razón Social</th><th>Régimen</th></tr></thead>
+                      <tbody>
+                        <tr><td>1</td><td style="font-family:monospace">30-70123456-8</td><td>DISTRIBUIDORA NORTE ANDINO S.A.</td><td><span class="badge badge-cm">CM</span></td></tr>
+                        <tr><td>2</td><td style="font-family:monospace">20-28456789-4</td><td>COMERCIAL PUNA NORTE S.R.L.</td><td><span class="badge badge-cm">CM</span></td></tr>
+                        <tr><td>3</td><td style="font-family:monospace">27-32178654-3</td><td>MINERA ALTIPLANO JUJUY S.A.</td><td><span class="badge badge-cm">CM</span></td></tr>
+                      </tbody>
+                    </table>
+                    <div style="font-size:11.5px;color:var(--gray-5);margin-top:8px">Mostrando 3 de 47 CUITs</div>
+                  </div>
+                </td>
+              </tr>
+              <tr class="lote-row" id="row-lote-589" onclick="toggleLote('589')">
+                <td><span id="chevron-589" style="display:inline-flex;align-items:center;color:var(--gray-5);transition:transform .2s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span></td>
+                <td style="font-weight:700">589</td>
+                <td style="font-weight:500">TRUFA-589</td>
+                <td style="color:var(--gray-5)">Fiscalización especial — grandes contribuyentes</td>
+                <td style="text-align:center;font-weight:600">83</td>
+                <td style="color:var(--gray-5)">28/03/2026</td>
+                <td onclick="event.stopPropagation()">
+                  <button class="action-icon" onclick="toggleMenu('menu-589',this)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="dropdown-menu" id="menu-589" style="min-width:260px;padding:8px 0;overflow:hidden">
+                    <div onclick="confirmarCruceLoteSimple('589','Control de desvío de BI — Régimen CM')" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--gray-7)" onmouseover="this.style.background='var(--blue-1)'" onmouseout="this.style.background=''">Control de desvío de BI — Régimen CM</div>
+                    <div onclick="confirmarCruceLoteSimple('589','Control de créditos')" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--gray-7)" onmouseover="this.style.background='var(--blue-1)'" onmouseout="this.style.background=''">Control de créditos</div>
+                  </div>
+                </td>
+              </tr>
+              <tr class="expand-row" id="expand-589">
+                <td colspan="7" style="padding:0;background:var(--gray-0);border-bottom:2px solid var(--blue-3)">
+                  <div style="padding:12px 16px 14px 48px">
+                    <table class="inner-table">
+                      <thead><tr><th>#</th><th>CUIT</th><th>Razón Social</th><th>Régimen</th></tr></thead>
+                      <tbody>
+                        <tr><td>1</td><td style="font-family:monospace">30-50401884-5</td><td>VOLKSWAGEN ARGENTINA S.A.</td><td><span class="badge badge-cm">CM</span></td></tr>
+                        <tr><td>2</td><td style="font-family:monospace">30-50168521-2</td><td>CERÁMICA DEL NORTE S.A.</td><td><span class="badge badge-cm">CM</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: GESTIÓN DE CRUCES -->
+    <div id="view-tablero" class="view">
+      <div class="topbar">
+        <div class="breadcrumb"><span>Sistema IF</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="cur">Gestión de Cruces</span></div>
+      </div>
+      <div class="page">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre del cruce</th>
+                <th>Origen</th>
+                <th>Lote / CUIT</th>
+                <th>Período</th>
+                <th>CUITs</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody id="historial-tbody">
+              <tr class="lote-row" onclick="showToast('📊 Abriendo papel de trabajo...','info')">
+                <td style="font-weight:600">Control de desvío de BI — Régimen CM</td>
+                <td><span class="badge badge-lote">Lote</span></td>
+                <td style="font-family:monospace;font-weight:600">ANOVA-622</td>
+                <td style="color:var(--gray-5)">2024</td>
+                <td style="text-align:center;font-weight:600">47</td>
+                <td style="color:var(--gray-5)">27/04/2026</td>
+              </tr>
+              <tr class="lote-row" onclick="showToast('📊 Abriendo papel de trabajo...','info')">
+                <td style="font-weight:600">Control de créditos</td>
+                <td><span class="badge badge-lote">Lote</span></td>
+                <td style="font-family:monospace;font-weight:600">TRUFA-589</td>
+                <td style="color:var(--gray-5)">2023</td>
+                <td style="text-align:center;font-weight:600">83</td>
+                <td style="color:var(--gray-5)">20/04/2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: REPROCESO -->
+    <div id="view-reproceso" class="view">
+      <div class="topbar">
+        <div class="breadcrumb"><span>Sistema IF</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="cur">Reproceso</span></div>
+      </div>
+      <div class="page">
+        <div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:700;color:#DC2626">CUITs en reproceso</div>
+            <div style="font-size:12px;color:#991B1B;margin-top:2px">Contribuyentes pendientes de investigación profunda.</div>
+          </div>
+          <span id="reproceso-total-badge" style="background:#DC2626;color:white;font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px">0 en reproceso</span>
+        </div>
+        <div style="background:white;border:1px solid #E2E8F0;border-radius:12px;overflow:hidden">
+          <table style="width:100%;border-collapse:collapse">
+            <thead style="background:#F8FAFC">
+              <tr>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #E2E8F0">CUIT</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #E2E8F0">Razón Social</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #E2E8F0">Fecha</th>
+                <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;border-bottom:2px solid #E2E8F0">Notas</th>
+                <th style="width:50px;border-bottom:2px solid #E2E8F0"></th>
+              </tr>
+            </thead>
+            <tbody id="reproceso-tbody">
+              <tr><td colspan="5" style="padding:32px;text-align:center;color:var(--gray-5);font-size:13px">No hay CUITs en reproceso</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: NUEVO LOTE -->
+<div class="modal-backdrop" id="modal-nuevo-lote">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title">Crear nuevo lote</div><div class="modal-subtitle">Completá los datos y cargá los CUITs a analizar</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-nuevo-lote');resetForm()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Nro de lote</label>
+        <input class="form-input" type="text" value="623" disabled style="background:var(--gray-1);color:var(--gray-5);">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nombre del lote <span style="color:var(--red-5)">*</span></label>
+          <input class="form-input" id="lote-nombre" type="text" placeholder="Ej: ANOVA-623" oninput="clearFieldError('lote-nombre','err-nombre');checkCargarBtn()">
+          <div class="form-error" id="err-nombre"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Régimen <span style="color:var(--red-5)">*</span></label>
+          <select class="form-input form-select" id="lote-regimen" onchange="clearFieldError('lote-regimen','err-regimen')">
+            <option value="">Seleccioná un régimen</option>
+            <option value="cm">Convenio Multilateral (CM)</option>
+            <option value="local">Régimen Local</option>
+            <option value="ambos">Ambos</option>
+          </select>
+          <div class="form-error" id="err-regimen"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <input class="form-input" id="lote-desc" type="text" placeholder="Ej: Comercio mayorista con variación negativa 2024">
+      </div>
+      <div class="form-group">
+        <label class="form-label">CUITs a analizar <span style="color:var(--red-5)">*</span></label>
+        <div class="cuit-tag-area" id="cuit-area" onclick="document.getElementById('cuit-input').focus()">
+          <input id="cuit-input" type="text" placeholder="Escribí o pegá CUITs..." style="border:none;outline:none;font-size:13px;min-width:180px;background:transparent;font-family:'DM Sans',sans-serif;flex:1;" onkeydown="handleCuitInput(event)" onpaste="handleCuitPaste(event)">
+        </div>
+        <div class="form-error" id="err-cuits"></div>
+        <div class="form-hint" style="margin-top:4px">Presioná Enter para agregar, o pegá varios separados por coma.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-nuevo-lote');resetForm()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-cargar-lote" onclick="validarYCrear()" disabled style="opacity:.45;cursor:not-allowed">Cargar lote</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REPROCESO -->
+<div class="modal-backdrop" id="modal-reproceso-desc">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <div><div class="modal-title">Marcar en Reproceso</div><div class="modal-subtitle" id="reproceso-modal-cuit">CUIT — Razón Social</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="cerrarModalReproceso()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Motivo / Descripción <span style="color:var(--gray-3);font-weight:400">(opcional)</span></label>
+        <textarea id="reproceso-desc-input" class="form-input" rows="3" placeholder="Ej: Pendiente revisión de coeficientes..." style="resize:vertical;min-height:80px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="cerrarModalReproceso()">Cancelar</button>
+      <button class="btn btn-primary" style="background:#DC2626" onclick="confirmarReproceso()">Confirmar reproceso</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let cuitList = [];
+let _loteCounter = 623;
+let _reprocessCount = 0;
+
+function resetForm() {
+  cuitList = [];
+  ['lote-nombre','lote-desc'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  const reg = document.getElementById('lote-regimen'); if(reg) reg.value='';
+  const area = document.getElementById('cuit-area');
+  if(area) { area.querySelectorAll('.cuit-tag').forEach(t=>t.remove()); area.classList.remove('error'); }
+  const btn = document.getElementById('btn-cargar-lote');
+  if(btn) { btn.disabled=true; btn.style.opacity='.45'; btn.style.cursor='not-allowed'; }
+}
+
+function clearFieldError(fid,eid) {
+  document.getElementById(fid)?.classList.remove('error');
+  const e=document.getElementById(eid); if(e) e.textContent='';
+}
+
+function checkCargarBtn() {
+  const area=document.getElementById('cuit-area');
+  const btn=document.getElementById('btn-cargar-lote');
+  const nombre=document.getElementById('lote-nombre')?.value.trim();
+  if(!area||!btn) return;
+  const hasCuits=area.querySelectorAll('.cuit-tag').length>0;
+  const enabled=hasCuits&&nombre;
+  btn.disabled=!enabled;
+  btn.style.opacity=enabled?'1':'.45';
+  btn.style.cursor=enabled?'pointer':'not-allowed';
+}
+
+function handleCuitInput(e) {
+  if(e.key==='Enter'||e.key===',') { e.preventDefault(); const v=e.target.value.trim().replace(',',''); if(v) addCuitTag(v); e.target.value=''; }
+}
+function handleCuitPaste(e) {
+  e.preventDefault();
+  const text=(e.clipboardData||window.clipboardData).getData('text');
+  text.split(/[\n,;\s]+/).map(c=>c.trim()).filter(c=>c.length>0).forEach(c=>addCuitTag(c));
+  e.target.value='';
+}
+function addCuitTag(cuit) {
+  const area=document.getElementById('cuit-area');
+  const input=document.getElementById('cuit-input');
+  const tag=document.createElement('span');
+  tag.className='cuit-tag';
+  tag.innerHTML=cuit+' <span class="cuit-tag-x" onclick="this.parentElement.remove();checkCargarBtn()">×</span>';
+  area.insertBefore(tag,input);
+  area.classList.remove('error');
+  checkCargarBtn();
+}
+
+function validarYCrear() {
+  const nombre=document.getElementById('lote-nombre').value.trim();
+  const regimen=document.getElementById('lote-regimen').value;
+  const area=document.getElementById('cuit-area');
+  const tags=area.querySelectorAll('.cuit-tag');
+  let ok=true;
+  if(!nombre){document.getElementById('err-nombre').textContent='El nombre es obligatorio.';document.getElementById('lote-nombre').classList.add('error');ok=false;}
+  if(!regimen){document.getElementById('err-regimen').textContent='Seleccioná un régimen.';document.getElementById('lote-regimen').classList.add('error');ok=false;}
+  if(tags.length===0){document.getElementById('err-cuits').textContent='Debés cargar al menos un CUIT.';area.classList.add('error');ok=false;}
+  if(!ok) return;
+  const hoy=new Date();
+  const fecha=`${String(hoy.getDate()).padStart(2,'0')}/${String(hoy.getMonth()+1).padStart(2,'0')}/${hoy.getFullYear()}`;
+  const nro=_loteCounter++;
+  const id='dyn-'+nro;
+  const tbody=document.getElementById('lotes-tbody');
+  const tr=document.createElement('tr');
+  tr.className='lote-row';
+  tr.id='row-lote-'+id;
+  tr.setAttribute('onclick',`toggleLote('${id}')`);
+  tr.innerHTML=`<td><span id="chevron-${id}" style="display:inline-flex;align-items:center;color:var(--gray-5)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span></td><td style="font-weight:700">${nro}</td><td style="font-weight:500">${nombre}</td><td style="color:var(--gray-5)">${document.getElementById('lote-desc').value.trim()}</td><td style="text-align:center;font-weight:600">${tags.length}</td><td style="color:var(--gray-5)">${fecha}</td><td></td>`;
+  const exp=document.createElement('tr');
+  exp.className='expand-row';
+  exp.id='expand-'+id;
+  exp.innerHTML=`<td colspan="7" style="padding:0;background:var(--gray-0)"><div style="padding:12px 48px;font-size:12px;color:var(--gray-5)">${tags.length} CUITs cargados</div></td>`;
+  tbody.insertBefore(exp,tbody.firstChild);
+  tbody.insertBefore(tr,tbody.firstChild);
+  closeModal('modal-nuevo-lote');
+  resetForm();
+  showToast('✅ Lote '+nro+' creado correctamente','success');
+}
+
+function toggleLote(id) {
+  const expand=document.getElementById('expand-'+id);
+  const chevron=document.getElementById('chevron-'+id);
+  const row=document.getElementById('row-lote-'+id);
+  const isOpen=expand.classList.contains('open');
+  expand.classList.toggle('open',!isOpen);
+  if(chevron) chevron.style.transform=isOpen?'':'rotate(90deg)';
+  if(row) row.classList.toggle('expanded',!isOpen);
+}
+
+function toggleMenu(id,btn) {
+  const menu=document.getElementById(id);
+  const isOpen=menu.classList.contains('open');
+  document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+  if(!isOpen) {
+    const rect=btn.getBoundingClientRect();
+    menu.style.top=(rect.bottom+4)+'px';
+    menu.style.left=Math.max(8,rect.right-260)+'px';
+    menu.classList.add('open');
+  }
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.dropdown-menu')&&!e.target.closest('.action-icon'))
+    document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+});
+
+function confirmarCruceLoteSimple(loteId,nombre) {
+  document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+  agregarCruceAlHistorial(nombre,'Lote','LOTE-'+loteId,'2024',47);
+  showView('tablero');
+  showToast('✅ Cruce agregado al historial','success');
+}
+
+function agregarCruceAlHistorial(nombre,origen,lote,periodo,cuits) {
+  const tbody=document.getElementById('historial-tbody');
+  if(!tbody) return;
+  const hoy=new Date();
+  const fecha=`${String(hoy.getDate()).padStart(2,'0')}/${String(hoy.getMonth()+1).padStart(2,'0')}/${hoy.getFullYear()}`;
+  const tr=document.createElement('tr');
+  tr.className='lote-row';
+  tr.onclick=()=>showToast('📊 Abriendo papel de trabajo...','info');
+  tr.innerHTML=`<td style="font-weight:600">${nombre}</td><td><span class="badge badge-lote">${origen}</span></td><td style="font-family:monospace;font-weight:600">${lote}</td><td style="color:var(--gray-5)">${periodo}</td><td style="text-align:center;font-weight:600">${cuits}</td><td style="color:var(--gray-5)">${fecha}</td>`;
+  tbody.insertBefore(tr,tbody.firstChild);
+}
+
+function filtrarLotes(q) {
+  document.querySelectorAll('#lotes-tbody tr.lote-row').forEach(r=>{
+    const match=!q||r.textContent.toLowerCase().includes(q.toLowerCase());
+    r.style.display=match?'':'none';
+    const id=r.id.replace('row-lote-','');
+    const exp=document.getElementById('expand-'+id);
+    if(exp) exp.style.display=match?'':'none';
+  });
+}
+
+function showView(name) {
+  ['padron','lotes','tablero','reproceso'].forEach(v=>{
+    const el=document.getElementById('view-'+v);
+    if(el) el.classList.remove('active');
+  });
+  const target=document.getElementById('view-'+name);
+  if(target) target.classList.add('active');
+  window.scrollTo(0,0);
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+  const navEl=document.getElementById('nav-'+name);
+  if(navEl) navEl.classList.add('active');
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-backdrop').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m) m.classList.remove('open');});
+});
+
+function showToast(msg,type='info') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type; t.style.display='block';
+  setTimeout(()=>{t.style.display='none';},3200);
+}
+
+function toggleLoginEye() {
+  const inp=document.getElementById('login-pass');
+  const icon=document.getElementById('login-eye-icon');
+  const isHidden=inp.type==='password';
+  inp.type=isHidden?'text':'password';
+  icon.innerHTML=isHidden?`<path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>`:`<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
+}
+
+function toggleRecoverAlert() {
+  const box=document.getElementById('login-recover-box');
+  box.style.display=box.style.display==='flex'?'none':'flex';
+}
+
+function doLogin() {
+  const email=(document.getElementById('login-email').value||'').trim();
+  const pass=(document.getElementById('login-pass').value||'');
+  const errBox=document.getElementById('login-err-box');
+  errBox.style.display='none';
+  document.getElementById('login-email').classList.remove('error');
+  document.getElementById('login-pass').classList.remove('error');
+  if(!email||!pass){
+    document.getElementById('login-err-txt').textContent='Completá usuario y contraseña.';
+    errBox.style.display='flex';
+    return;
+  }
+  if(email!=='admin@rentas.gob.ar'||pass!=='admin123'){
+    document.getElementById('login-err-txt').textContent='Credenciales incorrectas.';
+    errBox.style.display='flex';
+    document.getElementById('login-email').classList.add('error');
+    document.getElementById('login-pass').classList.add('error');
+    return;
+  }
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-app').style.display='flex';
+  showView('padron');
+  setTimeout(()=>showToast('👋 Bienvenida, Nadia Guzmán','success'),300);
+}
+
+function abrirDetallePadron() {
+  document.getElementById('padron-lista').style.display='none';
+  document.getElementById('padron-detalle').style.display='block';
+  document.getElementById('padron-breadcrumb').textContent='VOLKSWAGEN ARGENTINA S.A.';
+}
+function volverListaPadron() {
+  document.getElementById('padron-lista').style.display='block';
+  document.getElementById('padron-detalle').style.display='none';
+  document.getElementById('padron-breadcrumb').textContent='Padrón Unificado';
+}
+
+function toggleMenuCuit(btn) {
+  const menu=btn.nextElementSibling;
+  document.querySelectorAll('.cuit-menu').forEach(m=>{if(m!==menu) m.style.display='none';});
+  menu.style.display=menu.style.display==='none'?'block':'none';
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.cuit-menu')&&!e.target.closest('[onclick*="toggleMenuCuit"]'))
+    document.querySelectorAll('.cuit-menu').forEach(m=>m.style.display='none');
+});
+
+function toggleReprocesoPadron() {
+  const chip=document.getElementById('reproceso-chip');
+  const sw=document.getElementById('reproceso-switch');
+  const knob=document.getElementById('reproceso-knob');
+  const label=document.getElementById('reproceso-label');
+  const isActive=sw.dataset.active==='1';
+  if(!isActive) {
+    document.getElementById('reproceso-modal-cuit').textContent='30-50401884-5 — VOLKSWAGEN ARGENTINA S.A.';
+    document.getElementById('reproceso-desc-input').value='';
+    document.getElementById('modal-reproceso-desc').dataset.source='padron';
+    openModal('modal-reproceso-desc');
+  } else {
+    sw.style.background='var(--gray-2)'; sw.dataset.active='0';
+    knob.style.left='2px'; chip.style.background='white'; chip.style.borderColor='var(--gray-2)';
+    label.textContent='Marcar reproceso'; label.style.color='var(--gray-5)';
+    showToast('✅ CUIT quitado de reproceso','success');
+  }
+}
+
+function cerrarModalReproceso() {
+  document.getElementById('modal-reproceso-desc').dataset.source='';
+  closeModal('modal-reproceso-desc');
+}
+
+function confirmarReproceso() {
+  const desc=document.getElementById('reproceso-desc-input').value.trim()||'Sin descripción';
+  const source=document.getElementById('modal-reproceso-desc').dataset.source;
+  if(source==='padron') {
+    const sw=document.getElementById('reproceso-switch');
+    const knob=document.getElementById('reproceso-knob');
+    const chip=document.getElementById('reproceso-chip');
+    const label=document.getElementById('reproceso-label');
+    sw.style.background='#DC2626'; sw.dataset.active='1';
+    knob.style.left='14px'; chip.style.background='#FFF5F5'; chip.style.borderColor='#FECACA';
+    label.textContent='En reproceso'; label.style.color='#DC2626';
+    agregarAReproceso('30-50401884-5','VOLKSWAGEN ARGENTINA S.A.',desc);
+    document.getElementById('modal-reproceso-desc').dataset.source='';
+    closeModal('modal-reproceso-desc');
+    showToast('🔴 CUIT marcado en reproceso','info');
+    return;
+  }
+  closeModal('modal-reproceso-desc');
+}
+
+function agregarAReproceso(cuit,razon,desc) {
+  const tbody=document.getElementById('reproceso-tbody');
+  if(!tbody) return;
+  const vacioRow=tbody.querySelector('td[colspan]');
+  if(vacioRow) vacioRow.closest('tr').remove();
+  _reprocessCount++;
+  const hoy=new Date();
+  const fecha=`${String(hoy.getDate()).padStart(2,'0')}/${String(hoy.getMonth()+1).padStart(2,'0')}/${hoy.getFullYear()}`;
+  const rowId='repr-row-'+_reprocessCount;
+  const tr=document.createElement('tr');
+  tr.id=rowId;
+  tr.innerHTML=`<td style="padding:14px;font-family:monospace;font-weight:600;color:#4375EE">${cuit}</td><td style="padding:14px;font-weight:600">${razon}</td><td style="padding:14px;color:var(--gray-5)">${fecha}</td><td style="padding:14px;color:var(--gray-5);font-size:12.5px">${desc}</td><td style="padding:14px"><button onclick="quitarReproceso('${rowId}')" style="width:28px;height:28px;border:none;background:transparent;cursor:pointer;border-radius:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>`;
+  tbody.appendChild(tr);
+  const total=tbody.querySelectorAll('tr').length;
+  const badge=document.getElementById('reproceso-total-badge');
+  if(badge) badge.textContent=total+' en reproceso';
+}
+
+function quitarReproceso(rowId) {
+  const row=document.getElementById(rowId);
+  if(row) {
+    row.remove();
+    const total=document.querySelectorAll('#reproceso-tbody tr').length;
+    const badge=document.getElementById('reproceso-total-badge');
+    if(badge) badge.textContent=total+' en reproceso';
+    if(total===0) {
+      const tbody=document.getElementById('reproceso-tbody');
+      tbody.innerHTML='<tr><td colspan="5" style="padding:32px;text-align:center;color:var(--gray-5);font-size:13px">No hay CUITs en reproceso</td></tr>';
+    }
+    showToast('✅ CUIT quitado de reproceso','success');
+  }
+}
+
+function setPadronTab(el,tabId) {
+  document.querySelectorAll('.ptab-btn').forEach(btn=>{
+    btn.style.color='var(--gray-5)'; btn.style.fontWeight='500'; btn.style.borderBottom='2px solid transparent';
+  });
+  el.style.color='var(--blue-5)'; el.style.fontWeight='600'; el.style.borderBottom='2px solid var(--blue-5)';
+  document.querySelectorAll('.padron-tab-content').forEach(c=>c.style.display='none');
+  const t=document.getElementById(tabId); if(t) t.style.display='block';
+}
+
+window.addEventListener('load',()=>{
+  const p=document.getElementById('login-pass'); if(p) p.value='';
+});
+</script>
 </body>
 </html>
